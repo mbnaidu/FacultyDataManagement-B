@@ -3,9 +3,12 @@ import tabula
 import os
 from os.path import exists
 from PyPDF2 import PdfFileWriter, PdfFileReader
+import openpyxl
 
 is_resultPDF_path = './Assets/results.pdf'
+is_studentsListDatapath = "./Assets/studentsList.xlsx"
 is_resultPDF = exists(is_resultPDF_path)
+is_studentsListData = exists(is_studentsListDatapath)
 
 if(is_resultPDF):
     required_pages = sys.argv[1].split(',')
@@ -15,19 +18,24 @@ if(is_resultPDF):
     pdfFileObj = open(is_resultPDF_path, 'rb')
     infile = PdfFileReader(pdfFileObj, strict=False)
     output = PdfFileWriter()
-
     for i in range(infile.getNumPages()):
         if i in pages_to_add:
             p = infile.getPage(i)
             output.addPage(p)
-
     with open('./Assets/removed.pdf', 'wb') as f:
         output.write(f)
-
-
     file_exists = exists('./Assets/removed.pdf')
     if(file_exists):
         tables = tabula.read_pdf("./Assets/removed.pdf", pages="all")
-        tabula.convert_into("./Assets/removed.pdf", "./Assets/output.csv", output_format="csv", pages="all")
+        tabula.convert_into("./Assets/removed.pdf", "./Assets/output.xlsx", output_format="csv", pages="all")
 else:
-    print('-------------',sys.argv[2])
+    if(is_studentsListData):
+        arr =[]
+        wb=openpyxl.load_workbook(is_studentsListDatapath)
+        ws = wb.active
+        rows = ws.max_row
+        for i in range(2, rows):
+            arr.append({'registerID': ws.cell(i, 1).value, 'fullName': ws.cell(i, 2).value, '1-1':[], '1-2':[], '2-1':[], '2-2':[], '3-1':[], '3-2':[], 'backlogs': 0, 'percentage': 0})
+        print(arr)
+    else:
+        print("error reading file")
