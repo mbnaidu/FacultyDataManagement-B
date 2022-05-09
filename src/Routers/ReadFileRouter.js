@@ -32,9 +32,9 @@ router.post('/upload', upload.single('file'), function (req, res) {
                 studentDataModel.setNewStudentsData({
                     success: function (data) { res.status(200).send(data) },
                     error: function (err) { res.status(200).send(err) },
-                    branch: 'CSE',
-                    year: 2018,
-                    isPrev: 'CSE2018',
+                    branch: req.body.branch,
+                    year: req.body.year,
+                    isPrev: req.body.isPrev,
                     students: JSON.parse(outputText),
                 });
             }
