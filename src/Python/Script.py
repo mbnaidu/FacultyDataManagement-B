@@ -4,6 +4,7 @@ import os
 from os.path import exists
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import openpyxl
+import json
 
 is_resultPDF_path = './Assets/results.pdf'
 is_studentsListDatapath = "./Assets/studentsList.xlsx"
@@ -30,12 +31,13 @@ if(is_resultPDF):
         tabula.convert_into("./Assets/removed.pdf", "./Assets/output.xlsx", output_format="csv", pages="all")
 else:
     if(is_studentsListData):
-        arr =[]
+        arr = []
         wb=openpyxl.load_workbook(is_studentsListDatapath)
         ws = wb.active
         rows = ws.max_row
         for i in range(2, rows):
-            arr.append({'registerID': ws.cell(i, 1).value, 'fullName': ws.cell(i, 2).value, '1-1':[], '1-2':[], '2-1':[], '2-2':[], '3-1':[], '3-2':[], 'backlogs': 0, 'percentage': 0})
+            arr.append({'registerID': ws.cell(i, 1).value, 'fullName': ws.cell(i, 2).value, 'backlogs': 0, 'percentage': 0, '1-1':[], '1-2':[], '2-1':[], '2-2':[], '3-1':[], '3-2':[], '4-1':[], '4-2':[]})
+        arr = json.dumps(arr)
         print(arr)
     else:
         print("error reading file")
