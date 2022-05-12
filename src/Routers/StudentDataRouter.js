@@ -58,4 +58,12 @@ router.get('/getAllStudents', function (req, res) {
         res.send(categories);
     });
 });
+
+// GETTING AN ITEM
+router.post('/getByYearAndSection', (req, res) => {
+    console.log(req.body.data)
+    studentDataModel.findOne({ section: req.body.data.section, year: req.body.data.year })
+        .then((item) => res.json(item))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 module.exports = router;
