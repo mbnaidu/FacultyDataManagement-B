@@ -32,7 +32,7 @@ router.post('/upload', upload.single('file'), function (req, res) {
                 studentDataModel.setNewStudentsData({
                     success: function (data) { res.status(200).send(data) },
                     error: function (err) { res.status(200).send(err) },
-                    branch: req.body.branch,
+                    section: req.body.section,
                     year: req.body.year,
                     isPrev: req.body.isPrev,
                     students: JSON.parse(outputText),
@@ -59,9 +59,20 @@ router.get('/getAllStudents', function (req, res) {
     });
 });
 
-// GETTING AN ITEM
-router.post('/getByYearAndSection', (req, res) => {
-    console.log(req.body.data)
+// GETTING BY SECTION
+router.post('/getbysection', (req, res) => {
+    studentDataModel.find({ section: req.body.data.section })
+        .then((item) => res.json(item))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+// GETTING BY SECTION
+router.post('/getbyyear', (req, res) => {
+    studentDataModel.findOne({ year: req.body.data.year })
+        .then((item) => res.json(item))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+// GETTING BY SECTION
+router.post('/getbysectionandyear', (req, res) => {
     studentDataModel.findOne({ section: req.body.data.section, year: req.body.data.year })
         .then((item) => res.json(item))
         .catch(err => res.status(400).json('Error: ' + err));

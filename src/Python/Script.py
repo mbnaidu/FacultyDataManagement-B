@@ -36,7 +36,7 @@ else:
         ws = wb.active
         rows = ws.max_row
         for i in range(2, rows):
-            arr.append({'registerID': ws.cell(i, 1).value, 'fullName': ws.cell(i, 2).value, 'backlogs': 0, 'percentage': 0, '1-1':[], '1-2':[], '2-1':[], '2-2':[], '3-1':[], '3-2':[], '4-1':[], '4-2':[]})
+            arr.append({'registerID': ws.cell(i, 1).value, 'fullName': ws.cell(i, 2).value, 'gender': ws.cell(i, 3).value,'backlogs': 0, 'percentage': 0, '1-1':[], '1-2':[], '2-1':[], '2-2':[], '3-1':[], '3-2':[], '4-1':[], '4-2':[]})
         arr = json.dumps(arr)
         print(arr)
     else:
