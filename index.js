@@ -8,12 +8,10 @@ dotenv.config();
 
 const usersRoute = require('./src/Routers/UserRouter');
 const studentRoute = require('./src/Routers/StudentDataRouter');
-const readFileRoute = require('./src/Routers/ReadFileRouter');
 
 app.use(cors())
 app.use(usersRoute);
 app.use(studentRoute);
-app.use(readFileRoute);
 
 app.listen(process.env.PORT || 3001, () => {
     console.log(
