@@ -27,9 +27,8 @@ router.post('/upload', upload.single('file'), function (req, res) {
         let extract_pages = [89, 90, 91, 92, 93, 94, 95, 96, 97]
         const process = spawn('python', ['./src/Python/Script.py', extract_pages, is_PDF]);
         process.stdout.on('data', function (stdData) {
-            outputText = stdData.toString('utf8')
+            outputText = stdData.toString('utf8');
             outputText = JSON.parse(outputText);
-            genderData = outputText.splice(-1)
             // console.log('+++++', genderData[0].male)
             if (!is_PDF) {
                 studentDataModel.setNewStudentsData({
@@ -39,8 +38,13 @@ router.post('/upload', upload.single('file'), function (req, res) {
                     year: req.body.year,
                     isPrev: req.body.isPrev,
                     students: outputText,
-                    male: genderData[0].male,
-                    female: genderData[0].female
+                    male: outputText.filter((student) => student.gender === ('M' || 'Male' || 'male' || 'm')).length,
+                    female: outputText.filter((student) => student.gender === ('F' || 'Female' || 'female' || 'f')).length,
+                    percentage: outputText.filter((student) => (student.backlogs === 0)).length,
+                    malePercentage: outputText.filter((student) => (student.gender === ('M' || 'Male' || 'male' || 'm') && student.backlogs === 0)).length,
+                    femalePercentage: outputText.filter((student) => (student.gender === ('F' || 'Female' || 'female' || 'f') && student.backlogs === 0)).length,
+                    maleBacklogs: outputText.filter((student) => (student.gender === ('M' || 'Male' || 'male' || 'm') && student.backlogs !== 0)).length,
+                    femaleBacklogs: outputText.filter((student) => (student.gender === ('F' || 'Female' || 'female' || 'f') && student.backlogs !== 0)).length,
                 });
             }
             else {

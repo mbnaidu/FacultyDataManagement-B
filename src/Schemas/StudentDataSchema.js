@@ -4,8 +4,13 @@ let studentDataSchema = new mongoose.Schema({
     year: Number,
     isPrev: { type: String, unique: true },
     students: Array,
+    percentage: Number,
     male: Number,
-    female: Number
+    female: Number,
+    malePercentage: Number,
+    femalePercentage: Number,
+    maleBacklogs: Number,
+    femaleBacklogs: Number,
 });
 
 let studentDataModel = mongoose.model('studentData', studentDataSchema);
@@ -20,6 +25,11 @@ studentData.setNewStudentsData = function (handlers) {
     studentsList.students = handlers.students;
     studentsList.male = handlers.male;
     studentsList.female = handlers.female;
+    studentsList.percentage = handlers.percentage;
+    studentsList.malePercentage = handlers.malePercentage;
+    studentsList.femalePercentage = handlers.femalePercentage;
+    studentsList.maleBacklogs = handlers.maleBacklogs;
+    studentsList.femaleBacklogs = handlers.femaleBacklogs;
     return studentsList.save(function (err, data) {
         if (!err) {
             handlers.success(data);
