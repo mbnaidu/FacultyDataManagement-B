@@ -7,9 +7,7 @@ import openpyxl
 import json
 
 is_resultPDF_path = './Assets/results.pdf'
-is_studentsListDatapath = "./Assets/studentsList.xlsx"
 is_resultPDF = exists(is_resultPDF_path)
-is_studentsListData = exists(is_studentsListDatapath)
 
 if(is_resultPDF):
     required_pages = sys.argv[1].split(',')
@@ -29,15 +27,4 @@ if(is_resultPDF):
     if(file_exists):
         tables = tabula.read_pdf("./Assets/removed.pdf", pages="all")
         tabula.convert_into("./Assets/removed.pdf", "./Assets/output.xlsx", output_format="csv", pages="all")
-else:
-    if(is_studentsListData):
-        arr = []
-        wb=openpyxl.load_workbook(is_studentsListDatapath)
-        ws = wb.active
-        rows = ws.max_row
-        for i in range(2, rows + 1):
-            arr.append({'registerID': ws.cell(i, 1).value, 'fullName': ws.cell(i, 2).value, 'gender': ws.cell(i, 3).value,'backlogs': 0, 'percentage': 0, 'semesters':[]})
-        arr = json.dumps(arr)
-        print(arr)
-    else:
-        print("error reading file")
+        print("success")

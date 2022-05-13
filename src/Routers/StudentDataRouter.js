@@ -22,34 +22,49 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
-router.post('/upload', upload.single('file'), function (req, res) {
+router.post('/uploadStudentDataExcel', upload.single('file'), function (req, res) {
     function run() {
-        let extract_pages = [89, 90, 91, 92, 93, 94, 95, 96, 97]
-        const process = spawn('python', ['./src/Python/Script.py', extract_pages, is_PDF]);
+        const process = spawn('python', ['./src/Python/StudentExcel.py']);
         process.stdout.on('data', function (stdData) {
             outputText = stdData.toString('utf8');
             outputText = JSON.parse(outputText);
             // console.log('+++++', genderData[0].male)
-            if (!is_PDF) {
-                studentDataModel.setNewStudentsData({
-                    success: function (data) { res.status(200).send(data) },
-                    error: function (err) { res.status(200).send(err) },
-                    section: req.body.section,
-                    year: req.body.year,
-                    isPrev: req.body.isPrev,
-                    students: outputText,
-                    male: outputText.filter((student) => student.gender === ('M' || 'Male' || 'male' || 'm')).length,
-                    female: outputText.filter((student) => student.gender === ('F' || 'Female' || 'female' || 'f')).length,
-                    percentage: outputText.filter((student) => (student.backlogs === 0)).length,
-                    malePercentage: outputText.filter((student) => (student.gender === ('M' || 'Male' || 'male' || 'm') && student.backlogs === 0)).length,
-                    femalePercentage: outputText.filter((student) => (student.gender === ('F' || 'Female' || 'female' || 'f') && student.backlogs === 0)).length,
-                    maleBacklogs: outputText.filter((student) => (student.gender === ('M' || 'Male' || 'male' || 'm') && student.backlogs !== 0)).length,
-                    femaleBacklogs: outputText.filter((student) => (student.gender === ('F' || 'Female' || 'female' || 'f') && student.backlogs !== 0)).length,
-                });
-            }
-            else {
-                res.json()
-            }
+            studentDataModel.setNewStudentsData({
+                success: function (data) { res.status(200).send(data) },
+                error: function (err) { res.status(200).send(err) },
+                section: req.body.section,
+                year: req.body.year,
+                isPrev: req.body.isPrev,
+                students: outputText,
+                male: outputText.filter((student) => student.gender === ('M' || 'Male' || 'male' || 'm')).length,
+                female: outputText.filter((student) => student.gender === ('F' || 'Female' || 'female' || 'f')).length,
+                percentage: outputText.filter((student) => (student.backlogs === 0)).length,
+                malePercentage: outputText.filter((student) => (student.gender === ('M' || 'Male' || 'male' || 'm') && student.backlogs === 0)).length,
+                femalePercentage: outputText.filter((student) => (student.gender === ('F' || 'Female' || 'female' || 'f') && student.backlogs === 0)).length,
+                maleBacklogs: outputText.filter((student) => (student.gender === ('M' || 'Male' || 'male' || 'm') && student.backlogs !== 0)).length,
+                femaleBacklogs: outputText.filter((student) => (student.gender === ('F' || 'Female' || 'female' || 'f') && student.backlogs !== 0)).length,
+            });
+        });
+    }
+    (() => {
+        try {
+            run()
+            // process.exit(0)
+        } catch (e) {
+            console.error(e.stack);
+            process.exit(1);
+        }
+    })();
+});
+router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
+    function run() {
+        let extract_pages = [89, 90, 91, 92, 93, 94, 95, 96, 97]
+        const process = spawn('python', ['./src/Python/StudentPDF.py', extract_pages]);
+        process.stdout.on('data', function (stdData) {
+            if (typeof stdData.toString() === 'string')
+                studentDataModel.findOne({ isPrev: req.body.isPrev })
+                    .then((item) => res.json(item))
+                    .catch(err => res.status(400).json('Error: ' + err));
         });
     }
     (() => {
