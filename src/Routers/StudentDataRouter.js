@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
         }
     },
 })
+
 const upload = multer({ storage: storage })
 router.post('/upload', upload.single('file'), function (req, res) {
     function run() {
@@ -27,7 +28,9 @@ router.post('/upload', upload.single('file'), function (req, res) {
         const process = spawn('python', ['./src/Python/Script.py', extract_pages, is_PDF]);
         process.stdout.on('data', function (stdData) {
             outputText = stdData.toString('utf8')
-            // console.log('+++++', typeof stdData, JSON.parse(king))
+            outputText = JSON.parse(outputText);
+            genderData = outputText.splice(-1)
+            // console.log('+++++', genderData[0].male)
             if (!is_PDF) {
                 studentDataModel.setNewStudentsData({
                     success: function (data) { res.status(200).send(data) },
@@ -35,7 +38,9 @@ router.post('/upload', upload.single('file'), function (req, res) {
                     section: req.body.section,
                     year: req.body.year,
                     isPrev: req.body.isPrev,
-                    students: JSON.parse(outputText),
+                    students: outputText,
+                    male: genderData[0].male,
+                    female: genderData[0].female
                 });
             }
             else {
@@ -62,13 +67,13 @@ router.get('/getAllStudents', function (req, res) {
 // GETTING BY SECTION
 router.post('/getbysection', (req, res) => {
     studentDataModel.find({ section: req.body.data.section })
-        .then((item) => res.json(item))
+        .then((item) => { if (item.length > 0) { res.json(item) } else { res.json(null) } })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 // GETTING BY SECTION
 router.post('/getbyyear', (req, res) => {
     studentDataModel.findOne({ year: req.body.data.year })
-        .then((item) => res.json(item))
+        .then((item) => { if (item) { res.json(item) } else { res.send(null) } })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 // GETTING BY SECTION

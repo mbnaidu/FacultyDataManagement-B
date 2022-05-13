@@ -4,6 +4,8 @@ let studentDataSchema = new mongoose.Schema({
     year: Number,
     isPrev: { type: String, unique: true },
     students: Array,
+    male: Number,
+    female: Number
 });
 
 let studentDataModel = mongoose.model('studentData', studentDataSchema);
@@ -16,6 +18,8 @@ studentData.setNewStudentsData = function (handlers) {
     studentsList.year = handlers.year;
     studentsList.isPrev = handlers.isPrev;
     studentsList.students = handlers.students;
+    studentsList.male = handlers.male;
+    studentsList.female = handlers.female;
     return studentsList.save(function (err, data) {
         if (!err) {
             handlers.success(data);

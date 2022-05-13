@@ -32,11 +32,18 @@ if(is_resultPDF):
 else:
     if(is_studentsListData):
         arr = []
+        male = 0
+        female = 0
         wb=openpyxl.load_workbook(is_studentsListDatapath)
         ws = wb.active
         rows = ws.max_row
-        for i in range(2, rows):
+        for i in range(2, rows+1):
+            if ws.cell(i,3).value == ('M' or 'm' or 'Male' or 'male'):
+                male = male + 1
+            else:
+                female = female + 1
             arr.append({'registerID': ws.cell(i, 1).value, 'fullName': ws.cell(i, 2).value, 'gender': ws.cell(i, 3).value,'backlogs': 0, 'percentage': 0, '1-1':[], '1-2':[], '2-1':[], '2-2':[], '3-1':[], '3-2':[], '4-1':[], '4-2':[]})
+        arr.append({'male': male, 'female': female})
         arr = json.dumps(arr)
         print(arr)
     else:
