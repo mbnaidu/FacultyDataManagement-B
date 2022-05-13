@@ -72,13 +72,13 @@ router.post('/getbysection', (req, res) => {
 });
 // GETTING BY SECTION
 router.post('/getbyyear', (req, res) => {
-    studentDataModel.findOne({ year: req.body.data.year })
+    studentDataModel.find({ year: req.body.data.year })
         .then((item) => { if (item) { res.json(item) } else { res.send(null) } })
         .catch(err => res.status(400).json('Error: ' + err));
 });
 // GETTING BY SECTION
 router.post('/getbysectionandyear', (req, res) => {
-    studentDataModel.findOne({ section: req.body.data.section, year: req.body.data.year })
+    studentDataModel.find({ section: req.body.data.section, year: req.body.data.year })
         .then((item) => res.json(item))
         .catch(err => res.status(400).json('Error: ' + err));
 });
