@@ -56,6 +56,7 @@ router.post('/uploadStudentDataExcel', upload.single('file'), function (req, res
         }
     })();
 });
+
 router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
     function run() {
         let extract_pages = [89, 90, 91, 92, 93, 94, 95, 96, 97]
@@ -63,7 +64,25 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
         process.stdout.on('data', function (stdData) {
             if (typeof stdData.toString() === 'string')
                 studentDataModel.findOne({ isPrev: req.body.isPrev })
-                    .then((item) => res.json(item))
+                    .then((item) => {
+                        var spawn = require('child_process').spawn,
+                            py = spawn('python', ['./src/Python/StudentResult.py']),
+                            data = item.students,
+                            dataString = '';
+                        py.stdout.on('data', function (data) {
+                            var king = data.toString('utf8')
+                            king = JSON.parse(king)
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king })
+                                .then((item) => res.json(item))
+                                .catch(err => res.status(400).json('Error: ' + err));
+                            console.log('start', typeof king);
+                        });
+                        py.stdout.on('end', function () {
+                            console.log('end');
+                        });
+                        py.stdin.write(JSON.stringify(data));
+                        py.stdin.end();
+                    })
                     .catch(err => res.status(400).json('Error: ' + err));
         });
     }
