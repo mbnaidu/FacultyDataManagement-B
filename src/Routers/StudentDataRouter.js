@@ -66,13 +66,13 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
                 studentDataModel.findOne({ isPrev: req.body.isPrev })
                     .then((item) => {
                         var spawn = require('child_process').spawn,
-                            py = spawn('python', ['./src/Python/StudentResult.py']),
-                            data = item.students,
-                            dataString = '';
+                            py = spawn('python', ['./src/Python/StudentResult.py', req.body.semNumber]),
+                            data = item
+                        dataString = '';
                         py.stdout.on('data', function (data) {
                             var king = data.toString('utf8')
                             king = JSON.parse(king)
-                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king })
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs })
                                 .then((item) => res.json(item))
                                 .catch(err => res.status(400).json('Error: ' + err));
                             console.log('start', typeof king);
