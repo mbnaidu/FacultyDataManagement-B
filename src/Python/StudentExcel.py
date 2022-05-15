@@ -19,14 +19,14 @@ if(is_studentsListData):
             'backlogs': 0,
             'percentage': 0,
             'semesters':[
-                {'sem1Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem1Data'},
-                {'sem2Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem2Data'},
-                {'sem3Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem3Data'},
-                {'sem4Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem4Data'},
-                {'sem5Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem5Data'},
-                {'sem6Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem6Data'},
-                {'sem7Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem7Data'},
-                {'sem8Data':[],'numberOfAttempts':0, 'isAvailable': False, 'name':'sem8Data'},
+                {'sem1Data':[], 'isAvailable': False, 'name':'sem1Data'},
+                {'sem2Data':[], 'isAvailable': False, 'name':'sem2Data'},
+                {'sem3Data':[], 'isAvailable': False, 'name':'sem3Data'},
+                {'sem4Data':[], 'isAvailable': False, 'name':'sem4Data'},
+                {'sem5Data':[], 'isAvailable': False, 'name':'sem5Data'},
+                {'sem6Data':[], 'isAvailable': False, 'name':'sem6Data'},
+                {'sem7Data':[], 'isAvailable': False, 'name':'sem7Data'},
+                {'sem8Data':[], 'isAvailable': False, 'name':'sem8Data'},
             ]
         })
     arr = json.dumps(arr)

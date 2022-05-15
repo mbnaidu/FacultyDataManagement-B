@@ -36,6 +36,7 @@ router.post('/uploadStudentDataExcel', upload.single('file'), function (req, res
                 year: req.body.year,
                 isPrev: req.body.isPrev,
                 students: outputText,
+                presentSem: [],
                 male: outputText.filter((student) => student.gender === ('M' || 'Male' || 'male' || 'm')).length,
                 female: outputText.filter((student) => student.gender === ('F' || 'Female' || 'female' || 'f')).length,
                 percentage: outputText.filter((student) => (student.backlogs === 0)).length,
@@ -72,7 +73,7 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
                         py.stdout.on('data', function (data) {
                             var king = data.toString('utf8')
                             king = JSON.parse(king)
-                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs })
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs, })
                                 .then((item) => res.json(item))
                                 .catch(err => res.status(400).json('Error: ' + err));
                             console.log('start', typeof king);
