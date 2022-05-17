@@ -11,6 +11,7 @@ let studentDataSchema = new mongoose.Schema({
     femalePercentage: Number,
     maleBacklogs: Number,
     femaleBacklogs: Number,
+    presentSem: Array,
 });
 
 let studentDataModel = mongoose.model('studentData', studentDataSchema);
@@ -22,6 +23,7 @@ studentData.setNewStudentsData = function (handlers) {
     studentsList.section = handlers.section;
     studentsList.year = handlers.year;
     studentsList.isPrev = handlers.isPrev;
+    studentsList.presentSem = handlers.presentSem;
     studentsList.students = handlers.students;
     studentsList.male = handlers.male;
     studentsList.female = handlers.female;

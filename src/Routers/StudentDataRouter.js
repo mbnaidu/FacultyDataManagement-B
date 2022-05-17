@@ -73,7 +73,7 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
                         py.stdout.on('data', function (data) {
                             var king = data.toString('utf8')
                             king = JSON.parse(king)
-                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs, })
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs, presentSem: king.presentSem })
                                 .then((item) => res.json(item))
                                 .catch(err => res.status(400).json('Error: ' + err));
                             console.log('start', typeof king);

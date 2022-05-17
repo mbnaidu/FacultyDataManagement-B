@@ -17,6 +17,8 @@ def main():
     arr = []
     arr = lines[0]
     arr = json.loads(arr)
+    presentSem = []
+    presentSem = arr['presentSem']
     maleBacklogs = arr['maleBacklogs']
     femaleBacklogs = arr['femaleBacklogs']
     for i in range(len(arr['students'])):
@@ -37,8 +39,10 @@ def main():
             maleBacklogs = maleBacklogs + 1
         if count > 0 and temp['gender'] == ('F' or 'Female' or 'f' or 'female' or 'FEMALE'):
             femaleBacklogs = femaleBacklogs + 1
+    presentSem.append(sys.argv[1])
     arr['maleBacklogs'] = maleBacklogs
     arr['femaleBacklogs'] = femaleBacklogs
+    arr['presentSem'] = presentSem
     arr = json.dumps(arr)
     print(arr)
 #start process
