@@ -97,6 +97,33 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
         }
     })();
 });
+router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
+    function run() {
+        var spawn = require('child_process').spawn,
+            py = spawn('python', ['./src/Python/StudentSupply.py']);
+        data = 'madhu'
+        py.stdout.on('data', function (data) {
+            var king = data.toString('utf8')
+            // king = JSON.parse(king)
+            console.log('start', typeof king);
+            res.json('item')
+        });
+        py.stdout.on('end', function () {
+            console.log('end');
+        });
+        py.stdin.write(JSON.stringify(data));
+        py.stdin.end();
+    };
+    (() => {
+        try {
+            run()
+            // process.exit(0)
+        } catch (e) {
+            console.error(e.stack);
+            process.exit(1);
+        }
+    })();
+});
 router.get('/getAllStudents', function (req, res) {
     studentDataModel.find({}).then(function (categories) {
         res.send(categories);
