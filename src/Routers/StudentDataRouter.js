@@ -74,9 +74,9 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
                             var king = data.toString('utf8')
                             king = JSON.parse(king)
                             studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs, presentSem: king.presentSem })
-                                .then((item) => res.json(item))
-                                .catch(err => res.status(400).json('Error: ' + err));
-                            console.log('start', typeof king);
+                                .then((item) => console.log(item))
+                                .catch(err => console.log('Error: ' + err));
+                            res.json(data)
                         });
                         py.stdout.on('end', function () {
                             console.log('end');
@@ -99,20 +99,37 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
 });
 router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
     function run() {
-        var spawn = require('child_process').spawn,
-            py = spawn('python', ['./src/Python/StudentSupply.py']);
-        data = 'madhu'
-        py.stdout.on('data', function (data) {
-            var king = data.toString('utf8')
-            // king = JSON.parse(king)
-            console.log('start', typeof king);
-            res.json('item')
+        let extract_pages = [3]
+        const process = spawn('python', ['./src/Python/StudentPDF.py', extract_pages]);
+        process.stdout.on('data', function (stdData) {
+            if (typeof stdData.toString() === 'string') {
+                studentDataModel.findOne({ isPrev: req.body.isPrev })
+                    .then((item) => {
+                        var spawn = require('child_process').spawn,
+                            py = spawn('python', ['./src/Python/StudentSupply.py', req.body.semNumber]),
+                            data = item
+                        dataString = '';
+                        py.stdout.on('data', function (data) {
+                            var king = data.toString('utf8')
+                            king = JSON.parse(king)
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs })
+                                .then((item) => console.log(item))
+                                .catch(err => console.log('Error: ' + err));
+                            res.json(data)
+                        });
+                        py.stdout.on('end', function () {
+                            console.log('end');
+                        });
+                        py.stdin.write(JSON.stringify(data));
+                        py.stdin.end();
+                    })
+                    .catch(err => res.status(400).json('Error: ' + err));
+            }
         });
-        py.stdout.on('end', function () {
+        process.stdout.on('end', function () {
             console.log('end');
         });
-        py.stdin.write(JSON.stringify(data));
-        py.stdin.end();
+        process.stdin.end();
     };
     (() => {
         try {
