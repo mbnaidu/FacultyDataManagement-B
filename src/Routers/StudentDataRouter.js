@@ -106,7 +106,7 @@ router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
                 studentDataModel.findOne({ isPrev: req.body.isPrev })
                     .then((item) => {
                         var spawn = require('child_process').spawn,
-                            py = spawn('python', ['./src/Python/StudentSupply.py', req.body.semNumber]),
+                            py = spawn('python', ['./src/Python/StudentSupply.py', req.body.semNumber, req.body.isSupply, req.body.noOfAttempts]),
                             data = item
                         dataString = '';
                         py.stdout.on('data', function (data) {
@@ -114,7 +114,7 @@ router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
                         });
                         py.stdout.on('end', function () {
                             let output = JSON.parse(dataString)
-                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: output.students, maleBacklogs: output.maleBacklogs, femaleBacklogs: output.femaleBacklogs })
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: output.students, maleBacklogs: output.maleBacklogs, femaleBacklogs: output.femaleBacklogs, presentSem: output.presentSem })
                                 .then((item) => console.log(item))
                                 .catch(err => console.log('Error: ' + err));
                         });

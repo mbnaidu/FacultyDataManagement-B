@@ -22,6 +22,9 @@ def main():
     presentSem = arr['presentSem']
     maleBacklogs = arr['maleBacklogs']
     femaleBacklogs = arr['femaleBacklogs']
+    for n in range(len(presentSem)):
+        if presentSem[n]['name'] == sys.argv[1]:
+            presentSem[n]['noOfAttempts'] = sys.argv[3]
     for i in range(1, rows + 1):
         count = 0
         if(ws.cell(i, 5).value  != "No Change"):
@@ -36,6 +39,8 @@ def main():
                                     count = count + 1
                                     temp['semesters'][k][sys.argv[1]][l]['grade'] = ws.cell(i, 4).value
                                     temp['semesters'][k][sys.argv[1]][l]['credits'] = ws.cell(i, 5).value
+                                    if(sys.argv[2] == 'true'):
+                                        temp['semesters'][k][sys.argv[1]][l]['noOfAttempts'] = sys.argv[3]
                                     temp['backlogs'] = backlog - 1
                                     if count > 0 and temp['gender'] == ('M' or 'Male' or 'm' or 'male' or 'MALE'):
                                         maleBacklogs = maleBacklogs - 1
