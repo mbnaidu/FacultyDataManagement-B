@@ -71,18 +71,17 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
                             data = item
                         dataString = '';
                         py.stdout.on('data', function (data) {
-                            var king = data.toString('utf8')
-                            king = JSON.parse(king)
-                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs, presentSem: king.presentSem })
-                                .then((item) => console.log(item))
-                                .catch(err => console.log('Error: ' + err));
-                            res.json(data)
+                            dataString += data.toString();
                         });
                         py.stdout.on('end', function () {
-                            console.log('end');
+                            let output = JSON.parse(dataString)
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: output.students, maleBacklogs: output.maleBacklogs, femaleBacklogs: output.femaleBacklogs, presentSem: output.presentSem })
+                                .then()
+                                .catch(err => console.log('Error: ' + err));
                         });
                         py.stdin.write(JSON.stringify(data));
                         py.stdin.end();
+                        res.sendStatus(200)
                     })
                     .catch(err => res.status(400).json('Error: ' + err));
         });
@@ -97,6 +96,7 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
         }
     })();
 });
+
 router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
     function run() {
         let extract_pages = [3]
@@ -110,18 +110,17 @@ router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
                             data = item
                         dataString = '';
                         py.stdout.on('data', function (data) {
-                            var king = data.toString('utf8')
-                            king = JSON.parse(king)
-                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: king.students, maleBacklogs: king.maleBacklogs, femaleBacklogs: king.femaleBacklogs })
-                                .then((item) => console.log(item))
-                                .catch(err => console.log('Error: ' + err));
-                            res.json(data)
+                            dataString += data.toString();
                         });
                         py.stdout.on('end', function () {
-                            console.log('end');
+                            let output = JSON.parse(dataString)
+                            studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: output.students, maleBacklogs: output.maleBacklogs, femaleBacklogs: output.femaleBacklogs })
+                                .then((item) => console.log(item))
+                                .catch(err => console.log('Error: ' + err));
                         });
                         py.stdin.write(JSON.stringify(data));
                         py.stdin.end();
+                        res.sendStatus(200)
                     })
                     .catch(err => res.status(400).json('Error: ' + err));
             }

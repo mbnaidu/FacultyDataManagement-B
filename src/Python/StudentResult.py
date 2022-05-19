@@ -39,7 +39,7 @@ def main():
             maleBacklogs = maleBacklogs + 1
         if count > 0 and temp['gender'] == ('F' or 'Female' or 'f' or 'female' or 'FEMALE'):
             femaleBacklogs = femaleBacklogs + 1
-    presentSem.append(sys.argv[1])
+    presentSem.append({'name': sys.argv[1], 'noOfAttempts': 0})
     arr['maleBacklogs'] = maleBacklogs
     arr['femaleBacklogs'] = femaleBacklogs
     arr['presentSem'] = presentSem
