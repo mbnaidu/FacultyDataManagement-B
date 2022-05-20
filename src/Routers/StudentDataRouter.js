@@ -60,8 +60,7 @@ router.post('/uploadStudentDataExcel', upload.single('file'), function (req, res
 
 router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
     function run() {
-        let extract_pages = [89, 90, 91, 92, 93, 94, 95, 96, 97]
-        const process = spawn('python', ['./src/Python/StudentPDF.py', extract_pages]);
+        const process = spawn('python', ['./src/Python/StudentPDF.py']);
         process.stdout.on('data', function (stdData) {
             if (typeof stdData.toString() === 'string')
                 studentDataModel.findOne({ isPrev: req.body.isPrev })
@@ -99,8 +98,7 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
 
 router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
     function run() {
-        let extract_pages = [3]
-        const process = spawn('python', ['./src/Python/StudentPDF.py', extract_pages]);
+        const process = spawn('python', ['./src/Python/StudentPDF.py']);
         process.stdout.on('data', function (stdData) {
             if (typeof stdData.toString() === 'string') {
                 studentDataModel.findOne({ isPrev: req.body.isPrev })

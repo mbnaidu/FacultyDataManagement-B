@@ -36,16 +36,16 @@ def main():
                         if(temp['semesters'][k]['name'] == sys.argv[1]):
                             for l in range(len(temp['semesters'][k][sys.argv[1]])):
                                 if(temp['semesters'][k][sys.argv[1]][l]['subcode'] == ws.cell(i, 2).value):
-                                    count = count + 1
-                                    temp['semesters'][k][sys.argv[1]][l]['grade'] = ws.cell(i, 4).value
-                                    temp['semesters'][k][sys.argv[1]][l]['credits'] = ws.cell(i, 5).value
-                                    if(sys.argv[2] == 'true'):
+                                    if(temp['semesters'][k][sys.argv[1]][l]['grade'] !=  ws.cell(i, 4).value):
+                                        count = count + 1
+                                        temp['semesters'][k][sys.argv[1]][l]['grade'] = ws.cell(i, 4).value
+                                        temp['semesters'][k][sys.argv[1]][l]['credits'] = ws.cell(i, 5).value
                                         temp['semesters'][k][sys.argv[1]][l]['noOfAttempts'] = sys.argv[3]
-                                    temp['backlogs'] = backlog - 1
-                                    if count > 0 and temp['gender'] == ('M' or 'Male' or 'm' or 'male' or 'MALE'):
-                                        maleBacklogs = maleBacklogs - 1
-                                    if count > 0 and temp['gender'] == ('F' or 'Female' or 'f' or 'female' or 'FEMALE'):
-                                        femaleBacklogs = femaleBacklogs - 1
+                                        temp['backlogs'] = backlog - 1
+                                        if count > 0 and temp['gender'] == ('M' or 'Male' or 'm' or 'male' or 'MALE'):
+                                            maleBacklogs = maleBacklogs - 1
+                                        if count > 0 and temp['gender'] == ('F' or 'Female' or 'f' or 'female' or 'FEMALE'):
+                                            femaleBacklogs = femaleBacklogs - 1
     arr['maleBacklogs'] = maleBacklogs
     arr['femaleBacklogs'] = femaleBacklogs
     arr = json.dumps(arr)
