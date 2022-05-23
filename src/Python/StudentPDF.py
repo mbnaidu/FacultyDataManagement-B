@@ -8,11 +8,11 @@ import json
 import pandas as pd
 
 
-resultPDFPath = './Assets/results.pdf'
+resultPDFPath = './src/Files/results.pdf'
 is_resultPDF = exists(resultPDFPath)
-removedPDFPath = './Assets/removed.pdf'
-outputCSVPath = './Assets/output.xlsx'
-newOutputExcelPath = './Assets/newOutput.xlsx'
+removedPDFPath = './src/Files/removed.pdf'
+outputCSVPath = './src/Files/output.xlsx'
+newOutputExcelPath = './src/Files/newOutput.xlsx'
 
 if(is_resultPDF):
     tables = tabula.read_pdf(resultPDFPath, pages="all")

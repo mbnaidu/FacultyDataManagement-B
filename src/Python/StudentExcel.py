@@ -3,7 +3,7 @@ from os.path import exists
 import openpyxl
 import json
 
-is_studentsListDatapath = "./Assets/studentsList.xlsx"
+is_studentsListDatapath = "./src/Files/studentsList.xlsx"
 is_studentsListData = exists(is_studentsListDatapath)
 
 if(is_studentsListData):

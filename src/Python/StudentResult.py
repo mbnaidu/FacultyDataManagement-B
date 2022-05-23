@@ -9,7 +9,7 @@ def read_in():
     return lines
 
 def main():
-    excelPath = "./Assets/newOutput.xlsx"
+    excelPath = "./src/Files/newOutput.xlsx"
     wb=openpyxl.load_workbook(excelPath)
     ws = wb.active
     rows = ws.max_row
