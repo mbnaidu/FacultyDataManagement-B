@@ -27,7 +27,8 @@ if(is_studentsListData):
                 {'sem6Data':[], 'isAvailable': False, 'name':'sem6Data'},
                 {'sem7Data':[], 'isAvailable': False, 'name':'sem7Data'},
                 {'sem8Data':[], 'isAvailable': False, 'name':'sem8Data'},
-            ]
+            ],
+            'placements':[]
         })
     arr = json.dumps(arr)
     print(arr)

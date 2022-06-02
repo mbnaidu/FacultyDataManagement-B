@@ -96,6 +96,39 @@ router.post('/uploadResultPDF', upload.single('file'), function (req, res) {
     })();
 });
 
+router.post('/placements', upload.single('file'), function (req, res) {
+    function run() {
+        studentDataModel.findOne({ isPrev: req.body.isPrev })
+            .then((item) => {
+                var spawn = require('child_process').spawn,
+                    py = spawn('python', ['./src/Python/Placements.py']),
+                    data = item
+                dataString = '';
+                py.stdout.on('data', function (data) {
+                    dataString += data.toString();
+                });
+                py.stdout.on('end', function () {
+                    let output = JSON.parse(dataString)
+                    studentDataModel.findOneAndUpdate({ isPrev: req.body.isPrev }, { students: output.students })
+                        .then((item) => console.log(item))
+                        .catch(err => console.log('Error: ' + err));
+                });
+                py.stdin.write(JSON.stringify(data));
+                py.stdin.end();
+                res.sendStatus(200)
+            })
+            .catch(err => res.status(400).json('Error: ' + err));
+    }
+    (() => {
+        try {
+            run()
+            // process.exit(0)
+        } catch (e) {
+            console.error(e.stack);
+            process.exit(1);
+        }
+    })();
+})
 router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
     function run() {
         const process = spawn('python', ['./src/Python/StudentPDF.py']);
@@ -138,6 +171,7 @@ router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
         }
     })();
 });
+
 router.get('/getAllStudents', function (req, res) {
     studentDataModel.find({}).then(function (categories) {
         res.send(categories);
