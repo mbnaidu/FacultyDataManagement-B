@@ -23,8 +23,8 @@ def main():
         placements = []
         placements = temp['placements']
         for j in range(1, rows + 1):
-            if(temp['registerID'] == ws.cell(j, 1).value):
-                placements.append({'companyName' : ws.cell(j, 2).value, 'package':  ws.cell(j, 3).value})
+            if(temp['registerID'] == ws.cell(j, 2).value):
+                placements.append({'companyName' : ws.cell(j, 4).value, 'package':  ws.cell(j, 5).value, 'date': str(ws.cell(j, 6).value)})
         temp['placements'] = placements
     arr = json.dumps(arr)
     print(arr)

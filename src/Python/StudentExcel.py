@@ -18,6 +18,8 @@ if(is_studentsListData):
             'gender': ws.cell(i, 3).value,
             'backlogs': 0,
             'percentage': 0,
+            'totalCredits': 0,
+            'obtainedCredits': 0,
             'semesters':[
                 {'sem1Data':[], 'isAvailable': False, 'name':'sem1Data'},
                 {'sem2Data':[], 'isAvailable': False, 'name':'sem2Data'},

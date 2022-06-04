@@ -7,7 +7,19 @@ def read_in():
     lines = sys.stdin.readlines()
     #Since our input would only be having one line, parse our JSON data from that
     return lines
-
+def call_function(credit):
+    if(credit == 'O'):
+        return 10
+    if(credit == 'S'):
+        return 9
+    if(credit == 'A'):
+        return 8
+    if(credit == 'B'):
+        return 7
+    if(credit == 'C'):
+        return 6
+    if (credit == 'D'):
+        return 5
 def main():
     excelPath = "./src/Files/newOutput.xlsx"
     wb=openpyxl.load_workbook(excelPath)
@@ -25,16 +37,32 @@ def main():
         temp = arr['students'][i]
         output = []
         count = 0
+        creditsObtained = 0
+        creditsTotal = 0
         for j in range(1, rows + 1):
             if(temp['registerID'] == ws.cell(j, 1).value):
                 for k in range(len(temp['semesters'])):
                     if(temp['semesters'][k]['name'] == sys.argv[1]):
                         if ws.cell(j, 5).value == "0":
                             count = count + 1
+                        if ws.cell(j, 5).value == "1":
+                            credit1 = call_function(ws.cell(j, 4).value) * 1
+                            creditsObtained = creditsObtained + credit1
+                            creditsTotal = creditsTotal + 1
+                        if ws.cell(j, 5).value == "2":
+                            credit2 = call_function(ws.cell(j, 4).value) * 2
+                            creditsObtained = creditsObtained + credit2
+                            creditsTotal = creditsTotal + 2
+                        if ws.cell(j, 5).value == "3":
+                            credit3 = call_function(ws.cell(j, 4).value) * 3
+                            creditsObtained = creditsObtained + credit3
+                            creditsTotal = creditsTotal + 3
                         output.append({'subcode': ws.cell(j, 2).value,'subname': ws.cell(j, 3).value,'grade': ws.cell(j, 4).value,'credits': ws.cell(j, 5).value, 'noOfAttempts': 0})
                         temp['semesters'][k][sys.argv[1]] = output
                         temp['semesters'][k]['isAvailable'] = True
                         temp['backlogs'] = count
+                        temp['totalCredits'] = creditsTotal
+                        temp['obtainedCredits'] = creditsObtained
         if count > 0 and temp['gender'] == ('M' or 'Male' or 'm' or 'male' or 'MALE'):
             maleBacklogs = maleBacklogs + 1
         if count > 0 and temp['gender'] == ('F' or 'Female' or 'f' or 'female' or 'FEMALE'):

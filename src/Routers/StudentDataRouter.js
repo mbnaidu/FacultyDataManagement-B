@@ -129,6 +129,7 @@ router.post('/placements', upload.single('file'), function (req, res) {
         }
     })();
 })
+
 router.post('/uploadSupplyPDF', upload.single('file'), function (req, res) {
     function run() {
         const process = spawn('python', ['./src/Python/StudentPDF.py']);
