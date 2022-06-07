@@ -7,7 +7,7 @@ def read_in():
     lines = sys.stdin.readlines()
     #Since our input would only be having one line, parse our JSON data from that
     return lines
-def call_function(credit):
+def set_marks(credit):
     if(credit == 'O'):
         return 10
     if(credit == 'S'):
@@ -46,23 +46,23 @@ def main():
                         if ws.cell(j, 5).value == "0":
                             count = count + 1
                         if ws.cell(j, 5).value == "1":
-                            credit1 = call_function(ws.cell(j, 4).value) * 1
+                            credit1 = set_marks(ws.cell(j, 4).value) * 1
                             creditsObtained = creditsObtained + credit1
                             creditsTotal = creditsTotal + 1
                         if ws.cell(j, 5).value == "2":
-                            credit2 = call_function(ws.cell(j, 4).value) * 2
+                            credit2 = set_marks(ws.cell(j, 4).value) * 2
                             creditsObtained = creditsObtained + credit2
                             creditsTotal = creditsTotal + 2
                         if ws.cell(j, 5).value == "3":
-                            credit3 = call_function(ws.cell(j, 4).value) * 3
+                            credit3 = set_marks(ws.cell(j, 4).value) * 3
                             creditsObtained = creditsObtained + credit3
                             creditsTotal = creditsTotal + 3
                         output.append({'subcode': ws.cell(j, 2).value,'subname': ws.cell(j, 3).value,'grade': ws.cell(j, 4).value,'credits': ws.cell(j, 5).value, 'noOfAttempts': 0})
                         temp['semesters'][k][sys.argv[1]] = output
                         temp['semesters'][k]['isAvailable'] = True
+                        temp['semesters'][k]['TC'] = creditsTotal
+                        temp['semesters'][k]['OC'] = creditsObtained
                         temp['backlogs'] = count
-                        temp['totalCredits'] = creditsTotal
-                        temp['obtainedCredits'] = creditsObtained
         if count > 0 and temp['gender'] == ('M' or 'Male' or 'm' or 'male' or 'MALE'):
             maleBacklogs = maleBacklogs + 1
         if count > 0 and temp['gender'] == ('F' or 'Female' or 'f' or 'female' or 'FEMALE'):
